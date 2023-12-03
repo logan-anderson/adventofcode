@@ -3,6 +3,8 @@
   "github.copilot.enable": {
     "*": true,
     "py": false,
+    "javascript": false,
+    "typescript": false,
     "yaml": false,
     "plaintext": false,
     "markdown": false
