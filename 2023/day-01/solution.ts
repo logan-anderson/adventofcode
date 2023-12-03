@@ -28,43 +28,47 @@ export function getFirstDigit(str: string) {
 }
 
 export function getLastDigit(str: string) {
-  const matches = str.match(
-    /one|two|three|four|five|six|seven|eight|nine|[0-9]/gm
+  const reMatches = str.matchAll(
+    /(?=(one|two|three|four|five|six|seven|eight|nine|[0-9]))/gm
   );
-  if (!matches) {
+  const matches = [];
+
+  for (let m of reMatches) {
+    // @ts-ignore
+    matches.push(m[1]);
+  }
+
+  if (!matches.length) {
     return null;
   }
   const lastMatch = matches?.pop();
   if (!lastMatch) {
     return null;
   }
-  const match = lastMatch[0];
+  const match = lastMatch;
   if (Object.keys(matchMap).includes(match)) {
     return matchMap[match];
   }
   return match;
 }
-// export const solution = (input: string[]) => {
-//   let total = 0;
-//   input
-//     .map((x) => {
-//       return resolveMatches(x);
-//     })
-//     .map((x) => x.replace(/[^\d|\n]+/gm, ""))
-//     .map((x) => {
-//       const num = x[0] + x[x.length - 1];
-//       return Number(num);
-//     })
-//     .forEach((x) => {
-//       total += x;
-//     });
-//   return total;
-// };
-// // const run = async () => {
-//   const input = (await fs.readFile("2023/day-01/input.txt"))
-//     .toString()
-//     .split("\n");
-//   console.log({ total: solution(input) });
-// };
+export const solution = (input: string[]) => {
+  let total = 0;
+  input
+    .map((x) => {
+      const firstDigit = getFirstDigit(x);
+      const lastDigit = getLastDigit(x);
+      return Number(`${firstDigit}${lastDigit}`);
+    })
+    .forEach((x) => {
+      total += x;
+    });
+  return total;
+};
+const run = async () => {
+  const input = (await fs.readFile("2023/day-01/input.txt"))
+    .toString()
+    .split("\n");
+  console.log({ total: solution(input) });
+};
 
-// run();
+run();
